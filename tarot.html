@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>บุญดวง 🎴 ไพ่ทาโรต์</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+Thai:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg1: #0d0d1a;
+  --bg2: #1a0a2e;
+  --gold: #c9a84c;
+  --gold-light: #f0d080;
+  --gold-dim: #c9a84c44;
+  --white: rgba(255,255,255,0.9);
+  --white-dim: rgba(255,255,255,0.5);
+  --white-faint: rgba(255,255,255,0.1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: radial-gradient(ellipse at 30% 20%, #1a0a2e, #0d0d1a 70%);
+  min-height: 100vh;
+  font-family: 'Noto Sans Thai', sans-serif;
+  color: var(--white);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px 20px 40px;
+  overflow-x: hidden;
+}
+
+/* stars bg */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 20% 15%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 60% 30%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1.5px 1.5px at 70% 55%, rgba(201,168,76,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 25% 40%, rgba(201,168,76,0.4), transparent);
+}
+
+/* header */
+.header { text-align: center; margin-bottom: 28px; }
+.header-title {
+  font-family: 'Cinzel', serif;
+  font-size: 22px; letter-spacing: 4px;
+  color: var(--gold-light);
+  text-shadow: 0 0 20px var(--gold);
+  margin-bottom: 6px;
+}
+.header-sub {
+  font-size: 12px; color: var(--white-dim);
+  letter-spacing: 2px; text-transform: uppercase;
+}
+.day-pill {
+  display: inline-block; margin-top: 10px;
+  background: var(--gold-dim); border: 1px solid var(--gold);
+  border-radius: 20px; padding: 4px 16px;
+  font-size: 13px; color: var(--gold-light);
+}
+
+/* mascot row */
+.mascot-row {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 24px;
+  background: var(--white-faint);
+  border: 1px solid var(--gold-dim);
+  border-radius: 16px; padding: 12px 16px;
+  width: 100%; max-width: 360px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.mascot-row:active { background: rgba(201,168,76,0.1); }
+.mascot-emoji { font-size: 36px; transition: transform 0.3s; }
+.mascot-emoji.bounce { animation: bounce 0.4s ease; }
+@keyframes bounce {
+  0%,100% { transform: scale(1); }
+  40%      { transform: scale(1.3) rotate(-10deg); }
+  70%      { transform: scale(0.9) rotate(5deg); }
+}
+.mascot-info { flex: 1; }
+.mascot-name { font-size: 14px; font-weight: 600; color: var(--gold-light); }
+.mascot-msg  { font-size: 12px; color: var(--white-dim); margin-top: 2px; min-height: 16px; }
+
+/* card scene */
+.scene {
+  width: 200px; height: 340px;
+  perspective: 1000px;
+  margin-bottom: 28px;
+  cursor: pointer;
+}
+.card-3d {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.card-3d.flipped { transform: rotateY(180deg); }
+.card-3d.dealing { animation: deal 0.6s ease-out; }
+@keyframes deal {
+  from { transform: translateY(-60px) rotateY(90deg) scale(0.8); opacity: 0; }
+  to   { transform: translateY(0)     rotateY(0deg)  scale(1);   opacity: 1; }
+}
+
+.card-face, .card-back {
+  position: absolute; width: 100%; height: 100%;
+  border-radius: 16px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* card back */
+.card-back {
+  background: linear-gradient(135deg, #1a0a2e, #0d0d1a);
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 30px var(--gold-dim), inset 0 0 40px rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.card-back-pattern {
+  position: absolute; inset: 10px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 10px;
+  background:
+    repeating-linear-gradient(45deg, var(--gold-dim) 0px, var(--gold-dim) 1px, transparent 1px, transparent 8px),
+    repeating-linear-gradient(-45deg, var(--gold-dim) 0px, var(--gold-dim) 1px, transparent 1px, transparent 8px);
+}
+.card-back-center {
+  position: relative; z-index: 1;
+  font-size: 60px;
+  filter: drop-shadow(0 0 15px var(--gold));
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%,100% { filter: drop-shadow(0 0 10px var(--gold)); }
+  50%      { filter: drop-shadow(0 0 25px var(--gold-light)); }
+}
+
+/* card face */
+.card-face {
+  transform: rotateY(180deg);
+  background: linear-gradient(160deg, #1e0e35, #0a0a18);
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 40px var(--gold-dim), 0 20px 60px rgba(0,0,0,0.6);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 16px 12px;
+  overflow: hidden;
+}
+.card-face::before {
+  content: '';
+  position: absolute; inset: 6px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 10px; pointer-events: none;
+}
+.card-number {
+  font-family: 'Cinzel', serif;
+  font-size: 11px; letter-spacing: 3px;
+  color: var(--gold); opacity: 0.7; margin-bottom: 6px;
+}
+.card-symbol { font-size: 72px; margin: 4px 0 8px; line-height: 1; }
+.card-name-en {
+  font-family: 'Cinzel', serif;
+  font-size: 13px; letter-spacing: 2px;
+  color: var(--gold-light); text-align: center;
+  margin-bottom: 4px;
+}
+.card-name-th {
+  font-size: 15px; font-weight: 600;
+  color: var(--white); text-align: center;
+  margin-bottom: 8px;
+}
+.card-divider {
+  width: 60%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin-bottom: 10px;
+}
+.card-keywords {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  justify-content: center; margin-bottom: 6px;
+}
+.keyword-tag {
+  background: var(--gold-dim); border: 1px solid var(--gold);
+  border-radius: 8px; padding: 2px 8px;
+  font-size: 10px; color: var(--gold-light);
+}
+.card-reversed {
+  font-size: 10px; color: rgba(255,100,100,0.8);
+  letter-spacing: 1px; margin-top: 4px;
+}
+
+/* tap hint */
+.tap-hint {
+  font-size: 11px; color: var(--white-dim);
+  letter-spacing: 1px; margin-bottom: 20px;
+  animation: fade-blink 2s ease-in-out infinite;
+}
+@keyframes fade-blink {
+  0%,100% { opacity: 0.5; } 50% { opacity: 1; }
+}
+
+/* draw btn */
+.btn-draw {
+  width: 100%; max-width: 360px;
+  padding: 16px; border-radius: 16px;
+  background: linear-gradient(135deg, var(--gold-dim), rgba(201,168,76,0.3));
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  font-family: 'Cinzel', serif;
+  font-size: 15px; letter-spacing: 2px;
+  cursor: pointer; margin-bottom: 20px;
+  transition: all 0.2s;
+  box-shadow: 0 0 20px var(--gold-dim);
+}
+.btn-draw:active { background: rgba(201,168,76,0.4); transform: scale(0.98); }
+.btn-draw:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* interpretation */
+.interp-box {
+  width: 100%; max-width: 360px;
+  background: var(--white-faint);
+  border: 1px solid var(--gold-dim);
+  border-radius: 20px; padding: 20px;
+  animation: slide-up 0.5s ease-out;
+  position: relative; overflow: hidden;
+}
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.interp-box::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: shimmer 2.5s linear infinite;
+  background-size: 200% 100%;
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.interp-header {
+  font-family: 'Cinzel', serif;
+  font-size: 12px; letter-spacing: 2px;
+  color: var(--gold); margin-bottom: 12px;
+}
+.interp-text {
+  font-size: 14px; line-height: 1.8;
+  color: var(--white-dim);
+}
+.loading-interp {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--white-dim); font-size: 13px;
+}
+.spinner { font-size: 20px; animation: spin 1.5s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* particles */
+.particle-burst {
+  position: fixed; pointer-events: none;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold-light);
+  animation: burst 0.8s ease-out forwards;
+}
+@keyframes burst {
+  from { transform: translate(0,0) scale(1); opacity: 1; }
+  to   { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">✦ TAROT ✦</div>
+  <div class="header-sub">บุญดวง • ไพ่ทาโรต์</div>
+  <div class="day-pill" id="dayPill">— วันนี้ —</div>
+</div>
+
+<div class="mascot-row" id="mascotRow" onclick="shakeMascot()">
+  <div class="mascot-emoji" id="mascotEmoji">😤</div>
+  <div class="mascot-info">
+    <div class="mascot-name">บุญดวง</div>
+    <div class="mascot-msg" id="mascotMsg">กดสุ่มไพ่ได้เลย อย่ากลัว 😤</div>
+  </div>
+</div>
+
+<div class="scene" id="scene" onclick="onCardClick()">
+  <div class="card-3d" id="card3d">
+    <!-- back -->
+    <div class="card-back">
+      <div class="card-back-pattern"></div>
+      <div class="card-back-center">🔮</div>
+    </div>
+    <!-- face -->
+    <div class="card-face" id="cardFace">
+      <div class="card-number" id="cNumber">0</div>
+      <div class="card-symbol" id="cSymbol">🌟</div>
+      <div class="card-name-en" id="cNameEn">THE FOOL</div>
+      <div class="card-name-th" id="cNameTh">ผู้บริสุทธิ์</div>
+      <div class="card-divider"></div>
+      <div class="card-keywords" id="cKeywords"></div>
+      <div class="card-reversed" id="cReversed"></div>
+    </div>
+  </div>
+</div>
+
+<div class="tap-hint" id="tapHint">✦ กดไพ่เพื่อเปิด ✦</div>
+
+<button class="btn-draw" id="btnDraw" onclick="drawCard()">🎴 สุ่มไพ่ใหม่</button>
+
+<div class="interp-box" id="interpBox" style="display:none">
+  <div class="interp-header">✦ คำทำนายจากบุญดวง ✦</div>
+  <div id="interpContent" class="interp-text"></div>
+</div>
+
+<script>
+const TAROT = [
+  {num:"0",  en:"THE FOOL",           th:"ผู้บริสุทธิ์",    sym:"🌟", keys:["การเริ่มต้น","อิสรภาพ","ความบริสุทธิ์"]},
+  {num:"I",  en:"THE MAGICIAN",       th:"นักมายากล",       sym:"⚡", keys:["พลัง","ความสามารถ","การสร้างสรรค์"]},
+  {num:"II", en:"HIGH PRIESTESS",     th:"นักบวชหญิง",      sym:"🌙", keys:["ปัญญา","ความลึกลับ","สัญชาตญาณ"]},
+  {num:"III",en:"THE EMPRESS",        th:"จักรพรรดินี",     sym:"🌸", keys:["ความอุดมสมบูรณ์","ธรรมชาติ","ความรัก"]},
+  {num:"IV", en:"THE EMPEROR",        th:"จักรพรรดิ",       sym:"👑", keys:["อำนาจ","โครงสร้าง","ความมั่นคง"]},
+  {num:"V",  en:"THE HIEROPHANT",     th:"นักบวชสูงสุด",   sym:"🏛️", keys:["ประเพณี","ศาสนา","คำแนะนำ"]},
+  {num:"VI", en:"THE LOVERS",         th:"คู่รัก",           sym:"💞", keys:["ความรัก","ทางเลือก","ความสัมพันธ์"]},
+  {num:"VII",en:"THE CHARIOT",        th:"รถศึก",            sym:"🏆", keys:["ชัยชนะ","ความมุ่งมั่น","การเดินทาง"]},
+  {num:"VIII",en:"STRENGTH",          th:"ความเข้มแข็ง",   sym:"🦁", keys:["กำลังใจ","ความอดทน","การควบคุม"]},
+  {num:"IX", en:"THE HERMIT",         th:"ฤๅษี",             sym:"🏔️", keys:["การค้นหาตัวเอง","ปัญญา","ความสงบ"]},
+  {num:"X",  en:"WHEEL OF FORTUNE",   th:"วงล้อแห่งโชคชะตา",sym:"🎡",keys:["โชคชะตา","วัฏจักร","การเปลี่ยนแปลง"]},
+  {num:"XI", en:"JUSTICE",            th:"ความยุติธรรม",    sym:"⚖️", keys:["ความยุติธรรม","ความสมดุล","ความจริง"]},
+  {num:"XII",en:"THE HANGED MAN",     th:"ชายผู้ถูกแขวน",  sym:"🙃", keys:["การรอคอย","มุมมองใหม่","การเสียสละ"]},
+  {num:"XIII",en:"DEATH",             th:"ความตาย",          sym:"🌑", keys:["การเปลี่ยนแปลง","การสิ้นสุด","การเกิดใหม่"]},
+  {num:"XIV",en:"TEMPERANCE",         th:"ความพอดี",         sym:"🌊", keys:["ความสมดุล","การผสมผสาน","ความอดทน"]},
+  {num:"XV", en:"THE DEVIL",          th:"ซาตาน",            sym:"🔗", keys:["การผูกมัด","ความโลภ","สิ่งล่อใจ"]},
+  {num:"XVI",en:"THE TOWER",          th:"หอคอย",            sym:"⚡", keys:["การพังทลาย","การเปิดเผย","การเปลี่ยนแปลง"]},
+  {num:"XVII",en:"THE STAR",          th:"ดาว",               sym:"⭐", keys:["ความหวัง","แรงบันดาลใจ","การฟื้นฟู"]},
+  {num:"XVIII",en:"THE MOON",         th:"ดวงจันทร์",        sym:"🌕", keys:["ความลึกลับ","ภาพลวงตา","สัญชาตญาณ"]},
+  {num:"XIX",en:"THE SUN",            th:"ดวงอาทิตย์",      sym:"☀️", keys:["ความสุข","ความสำเร็จ","พลังงาน"]},
+  {num:"XX", en:"JUDGEMENT",          th:"การพิพากษา",      sym:"📯", keys:["การตัดสินใจ","การฟื้นคืน","การสำนึก"]},
+  {num:"XXI",en:"THE WORLD",          th:"โลก",              sym:"🌍", keys:["ความสมบูรณ์","ความสำเร็จ","การเดินทาง"]},
+];
+
+const DAY_THEMES = {
+  0:{day:"อาทิตย์",emoji:"☀️",element:"ไฟ"},
+  1:{day:"จันทร์", emoji:"🌙",element:"น้ำ"},
+  2:{day:"อังคาร", emoji:"🔥",element:"ไฟ"},
+  3:{day:"พุธ",    emoji:"⚡",element:"ดิน"},
+  4:{day:"พฤหัส", emoji:"🌟",element:"ไม้"},
+  5:{day:"ศุกร์",  emoji:"💫",element:"โลหะ"},
+  6:{day:"เสาร์",  emoji:"🪐",element:"ดิน"},
+};
+
+const MOODS = ["😤","🤨","😏","🧐","😒","🙄","😑"];
+const TAP_MSGS = [
+  "ดูดวงแล้วต้องทำกรรมดีด้วยนะ! 😤",
+  "แตะอีกแล้ว... ดวงไม่ดีขึ้นหรอก 🙄",
+  "หยุดแตะได้แล้ว ไปสุ่มไพ่เถอะ 🧐",
+  "บุญดวงเวียนหัวแล้วนะเออ 😵",
+];
+
+const t = DAY_THEMES[new Date().getDay()];
+let taps = 0, flipped = false, currentCard = null, isReversed = false;
+
+document.getElementById('dayPill').textContent =
+  `${t.emoji} วัน${t.day} • ธาตุ${t.element}`;
+
+function shakeMascot(){
+  const el = document.getElementById('mascotEmoji');
+  el.textContent = MOODS[Math.floor(Math.random()*MOODS.length)];
+  el.classList.remove('bounce'); void el.offsetWidth; el.classList.add('bounce');
+  taps++;
+  document.getElementById('mascotMsg').textContent =
+    TAP_MSGS[Math.min(taps-1, TAP_MSGS.length-1)];
+}
+
+function burstParticles(x, y){
+  for(let i=0;i<10;i++){
+    const p = document.createElement('div');
+    p.className = 'particle-burst';
+    const angle = (i/10)*Math.PI*2;
+    const dist = 40+Math.random()*60;
+    p.style.cssText = `left:${x}px;top:${y}px;--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;background:${i%2?'#f0d080':'#c9a84c'}`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 800);
+  }
+}
+
+function drawCard(){
+  const btn = document.getElementById('btnDraw');
+  btn.disabled = true;
+
+  // reset
+  const card = document.getElementById('card3d');
+  card.classList.remove('flipped');
+  flipped = false;
+  document.getElementById('interpBox').style.display = 'none';
+  document.getElementById('tapHint').textContent = '✦ กดไพ่เพื่อเปิด ✦';
+
+  setTimeout(()=>{
+    // pick random card
+    currentCard = TAROT[Math.floor(Math.random()*TAROT.length)];
+    isReversed  = Math.random() > 0.65;
+
+    document.getElementById('cNumber').textContent  = currentCard.num;
+    document.getElementById('cSymbol').textContent  = currentCard.sym;
+    document.getElementById('cNameEn').textContent  = currentCard.en;
+    document.getElementById('cNameTh').textContent  = currentCard.th;
+    document.getElementById('cReversed').textContent = isReversed ? '↓ ไพ่กลับหัว' : '';
+
+    const kw = document.getElementById('cKeywords');
+    kw.innerHTML = '';
+    currentCard.keys.forEach(k=>{
+      const span = document.createElement('span');
+      span.className = 'keyword-tag';
+      span.textContent = k;
+      kw.appendChild(span);
+    });
+
+    card.classList.remove('dealing');
+    void card.offsetWidth;
+    card.classList.add('dealing');
+    shakeMascot();
+    document.getElementById('mascotMsg').textContent = 'ไพ่ออกแล้ว! กดเปิดซะ 🎴';
+    btn.disabled = false;
+  }, 300);
+}
+
+function onCardClick(){
+  if(!currentCard) return;
+  const card = document.getElementById('card3d');
+  const rect = document.getElementById('scene').getBoundingClientRect();
+  burstParticles(rect.left + rect.width/2, rect.top + rect.height/2);
+
+  if(!flipped){
+    card.classList.add('flipped');
+    flipped = true;
+    document.getElementById('tapHint').textContent = '✦ เลื่อนลงดูคำทำนาย ✦';
+    interpretCard();
+  } else {
+    card.classList.remove('flipped');
+    flipped = false;
+    document.getElementById('tapHint').textContent = '✦ กดไพ่เพื่อเปิด ✦';
+    document.getElementById('interpBox').style.display = 'none';
+  }
+}
+
+async function interpretCard(){
+  const box = document.getElementById('interpBox');
+  const content = document.getElementById('interpContent');
+  box.style.display = 'block';
+  content.innerHTML = '<div class="loading-interp"><div class="spinner">🔮</div><div>บุญดวงกำลังอ่านไพ่...</div></div>';
+  box.scrollIntoView({behavior:'smooth', block:'nearest'});
+
+  try {
+    const res = await fetch('/api/tarot',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        card: currentCard.en,
+        card_th: currentCard.th,
+        keywords: currentCard.keys.join(', '),
+        reversed: isReversed,
+        day: t.day,
+        element: t.element
+      })
+    });
+    const data = await res.json();
+    const text = data.result || data.error || 'ระบบงง ลองใหม่ครับ';
+    content.innerHTML = text.replace(/\n/g,'<br>');
+  } catch(e){
+    content.innerHTML = 'เน็ตแกมีปัญหา... ไพ่ก็เลยอ่านไม่ออก นั่นแหละกรรมเก่า 😤';
+  }
+}
+
+// init
+drawCard();
+</script>
+</body>
+</html>
